@@ -639,7 +639,7 @@ func (a *App) cleanup() {
 
 func (a *App) Quit() {
 	if a.impl != nil {
-		a.impl.destroy()
+		InvokeSync(a.impl.destroy)
 	}
 }
 

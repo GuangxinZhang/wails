@@ -40,8 +40,11 @@ func main() {
 
 	// Create a custom menu
 	menu := app.NewMenu()
-	menu.AddRole(application.AppMenu)
-
+	if runtime.GOOS == "darwin" {
+		menu.AddRole(application.AppMenu)
+	} else {
+		menu.AddRole(application.FileMenu)
+	}
 	windowCounter := 1
 
 	// Let's make a "Demo" menu

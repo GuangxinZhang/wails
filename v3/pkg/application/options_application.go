@@ -52,7 +52,7 @@ type Options struct {
 	// KeyBindings is a map of key bindings to functions
 	KeyBindings map[string]func(window *WebviewWindow)
 
-	// OnShutdown is called when the application is about to quit.
+	// OnShutdown is called when the application is about to terminate.
 	// This is useful for cleanup tasks.
 	// The shutdown process blocks until this function returns
 	OnShutdown func()
