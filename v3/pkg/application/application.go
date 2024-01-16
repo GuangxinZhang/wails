@@ -617,12 +617,7 @@ func (a *App) OnShutdown(f func()) {
 	a.shutdownTasks = append(a.shutdownTasks, f)
 }
 
-func (a *App) Quit() {
-	if a.performingShutdown {
-		return
-	}
-	a.performingShutdown = true
-	// Run the shutdown tasks
+func (a *App) cleanup() {
 	for _, shutdownTask := range a.shutdownTasks {
 		InvokeSync(shutdownTask)
 	}
@@ -639,11 +634,13 @@ func (a *App) Quit() {
 		}
 		a.systemTrays = nil
 		a.systemTraysLock.Unlock()
-		if a.impl != nil {
-			a.impl.destroy()
-			a.impl = nil
-		}
 	})
+}
+
+func (a *App) Quit() {
+	if a.impl != nil {
+		a.impl.destroy()
+	}
 }
 
 func (a *App) SetIcon(icon []byte) {

@@ -116,6 +116,7 @@ func (m *linuxApp) run() error {
 }
 
 func (m *linuxApp) destroy() {
+	globalApplication.cleanup()
 	appDestroy(m.application)
 }
 
