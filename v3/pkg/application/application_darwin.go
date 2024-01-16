@@ -342,7 +342,7 @@ func shouldQuitApplication() C.bool {
 
 //export cleanup
 func cleanup() {
-	globalApplication.Quit()
+	globalApplication.cleanup()
 }
 
 func (a *App) logPlatformInfo() {
