@@ -28,7 +28,7 @@ extern void cleanup();
         self.shuttingDown = true;
         cleanup();
     }
-    return NSTerminateCancel;
+    return NSTerminateNow;
 }
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
 {

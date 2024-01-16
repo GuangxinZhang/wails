@@ -337,7 +337,7 @@ func processMenuItemClick(menuID C.uint) {
 //export shouldQuitApplication
 func shouldQuitApplication() C.bool {
 	// TODO: This should be configurable
-	return C.bool(true)
+	return C.bool(globalApplication.shouldQuit())
 }
 
 //export cleanup
