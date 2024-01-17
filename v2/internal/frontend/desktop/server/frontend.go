@@ -88,7 +88,7 @@ func (f *Frontend) OpenMultipleFilesDialog(dialogOptions frontend.OpenDialogOpti
 
 	done := make(chan bool)
 	go func() {
-		fmt.Print("请输入文件全路径，多个文件以空格分隔（60秒内）: ")
+		fmt.Print("请输入文件全路径，多个文件以分号分隔（60秒内）: ")
 		fmt.Scanln(&userInput)
 		done <- true
 	}()
