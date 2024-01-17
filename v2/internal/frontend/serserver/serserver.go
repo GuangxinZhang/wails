@@ -120,7 +120,7 @@ func (d *DevWebServer) Run(ctx context.Context) error {
 			d.LogDebug("Shutdown completed")
 		}(d.server, d.logger)
 
-		d.LogDebug("Serving DevServer at http://%s", devServerAddr)
+		d.LogDebug("Serving Server at http://%s", devServerAddr)
 	}
 	// Launch desktop app
 	err = d.Frontend.Run(ctx)
