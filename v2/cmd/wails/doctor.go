@@ -1,12 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"runtime"
 	"runtime/debug"
+	"strconv"
 	"strings"
 
 	"github.com/pterm/pterm"
 
+	"github.com/jaypipes/ghw"
 	"github.com/wailsapp/wails/v2/cmd/wails/flags"
 	"github.com/wailsapp/wails/v2/internal/colour"
 	"github.com/wailsapp/wails/v2/internal/system"
@@ -79,6 +82,42 @@ func diagnoseEnvironment(f *flags.Doctor) error {
 		{pterm.Bold.Sprint("Architecture"), runtime.GOARCH},
 	}
 
+	// Probe CPU
+	cpus, _ := ghw.CPU()
+	if cpus != nil {
+		prefix := "CPU"
+		for idx, cpu := range cpus.Processors {
+			if len(cpus.Processors) > 1 {
+				prefix = "CPU " + strconv.Itoa(idx+1)
+			}
+			systemTabledata = append(systemTabledata, []string{prefix, cpu.Model})
+		}
+	} else {
+		systemTabledata = append(systemTabledata, []string{"CPU", "Unknown"})
+	}
+
+	// Probe GPU
+	gpu, _ := ghw.GPU(ghw.WithDisableWarnings())
+	if gpu != nil {
+		prefix := "GPU"
+		for idx, card := range gpu.GraphicsCards {
+			if len(gpu.GraphicsCards) > 1 {
+				prefix = "GPU " + strconv.Itoa(idx+1) + " "
+			}
+			details := fmt.Sprintf("%s (%s) - Driver: %s", card.DeviceInfo.Product.Name, card.DeviceInfo.Vendor.Name, card.DeviceInfo.Driver)
+			systemTabledata = append(systemTabledata, []string{prefix, details})
+		}
+	} else {
+		systemTabledata = append(systemTabledata, []string{"GPU", "Unknown"})
+	}
+
+	memory, _ := ghw.Memory()
+	if memory != nil {
+		systemTabledata = append(systemTabledata, []string{"Memory", strconv.Itoa(int(memory.TotalPhysicalBytes/1024/1024/1024)) + "GB"})
+	} else {
+		systemTabledata = append(systemTabledata, []string{"Memory", "Unknown"})
+	}
+
 	err = pterm.DefaultTable.WithBoxed().WithData(systemTabledata).Render()
 	if err != nil {
 		return err
@@ -89,8 +128,8 @@ func diagnoseEnvironment(f *flags.Doctor) error {
 	// Output Dependencies Status
 	var dependenciesMissing []string
 	var externalPackages []*packagemanager.Dependency
-	var dependenciesAvailableRequired = 0
-	var dependenciesAvailableOptional = 0
+	dependenciesAvailableRequired := 0
+	dependenciesAvailableOptional := 0
 
 	dependenciesTableData := pterm.TableData{
 		{"Dependency", "Package Name", "Status", "Version"},

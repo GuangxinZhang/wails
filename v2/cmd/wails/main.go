@@ -66,7 +66,6 @@ func bool2Str(b bool) string {
 var app *clir.Cli
 
 func main() {
-
 	var err error
 
 	app = clir.NewCli("Wails", "Go/HTML Appkit", internal.Version)
@@ -76,6 +75,7 @@ func main() {
 
 	app.NewSubCommandFunction("build", "Builds the application", buildApplication)
 	app.NewSubCommandFunction("dev", "Runs the application in development mode", devApplication)
+	app.NewSubCommandFunction("server", "Builds the application in server mode", buildServerApplication)
 	app.NewSubCommandFunction("doctor", "Diagnose your environment", diagnoseEnvironment)
 	app.NewSubCommandFunction("init", "Initialises a new Wails project", initProject)
 	app.NewSubCommandFunction("update", "Update the Wails CLI", update)

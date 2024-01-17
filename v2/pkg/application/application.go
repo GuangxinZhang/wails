@@ -2,11 +2,12 @@ package application
 
 import (
 	"context"
+	"sync"
+
 	"github.com/wailsapp/wails/v2/internal/app"
 	"github.com/wailsapp/wails/v2/internal/signal"
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/options"
-	"sync"
 )
 
 // Application is the main Wails application
@@ -58,7 +59,6 @@ func (a *Application) Run() error {
 	if err != nil {
 		return err
 	}
-
 	a.application = application
 
 	// Control-C handlers

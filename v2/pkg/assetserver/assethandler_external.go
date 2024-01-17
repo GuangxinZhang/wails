@@ -1,5 +1,5 @@
-//go:build dev
-// +build dev
+//go:build dev || server
+// +build dev server
 
 package assetserver
 

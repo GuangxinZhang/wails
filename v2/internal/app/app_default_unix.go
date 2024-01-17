@@ -1,4 +1,4 @@
-//go:build !dev && !production && !bindings && (linux || darwin)
+//go:build !dev && !server && !production && !bindings && (linux || darwin)
 
 package app
 

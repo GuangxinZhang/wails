@@ -32,6 +32,7 @@ const (
 	Production
 	// Debug build
 	Debug
+	Server
 )
 
 // Options contains all the build options as well as the project data
@@ -98,7 +99,7 @@ func Build(options *Options) (string, error) {
 	switch options.OutputType {
 	case "desktop":
 		builder = newDesktopBuilder(options)
-	case "dev":
+	case "dev", "server":
 		builder = newDesktopBuilder(options)
 	default:
 		return "", fmt.Errorf("cannot build assets for output type %s", options.ProjectData.OutputType)

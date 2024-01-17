@@ -1,9 +1,10 @@
-//go:build !dev && !server
+//go:build server
 
 package runtime
 
 var RuntimeAssetsBundle = &RuntimeAssets{
 	desktopIPC:       DesktopIPC,
+	websocketIPC:     WebsocketIPC,
 	runtimeDesktopJS: RuntimeDesktopJS,
 }
 

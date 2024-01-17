@@ -1,4 +1,4 @@
-//go:build !dev && !production && !bindings && windows
+//go:build !dev && !production && !server && !bindings && windows
 
 package app
 

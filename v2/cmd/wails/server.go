@@ -17,7 +17,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/commands/build"
 )
 
-func buildApplication(f *flags.Build) error {
+func buildServerApplication(f *flags.ServerBuild) error {
 	if f.NoColour {
 		pterm.DisableColor()
 		colour.ColourEnabled = false
@@ -62,10 +62,10 @@ func buildApplication(f *flags.Build) error {
 	// Create BuildOptions
 	buildOptions := &build.Options{
 		Logger:            logger,
-		OutputType:        "desktop",
+		OutputType:        "server",
 		OutputFile:        f.OutputFilename,
 		CleanBinDirectory: f.Clean,
-		Mode:              f.GetBuildMode(),
+		Mode:              build.Server,
 		Devtools:          f.Debug || f.Devtools,
 		Pack:              !f.NoPackage,
 		LDFlags:           f.LdFlags,
@@ -262,6 +262,6 @@ func buildApplication(f *flags.Build) error {
 			return err
 		}
 	}
-
+	os.Setenv("devserver", f.DevServer)
 	return nil
 }
