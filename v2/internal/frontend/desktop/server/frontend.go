@@ -6,12 +6,16 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"log"
 	"net"
 	"net/url"
+	"os"
+	"strings"
 	"sync"
+	"time"
 	"unsafe"
 
 	"github.com/pkg/browser"
@@ -74,8 +78,35 @@ func (f *Frontend) MenuUpdateApplicationMenu() {
 
 }
 
+func fileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	return !os.IsNotExist(err)
+}
+
 func (f *Frontend) OpenMultipleFilesDialog(dialogOptions frontend.OpenDialogOptions) ([]string, error) {
-	return []string{}, nil
+	var userInput string
+
+	done := make(chan bool)
+	go func() {
+		fmt.Print("请输入文件全路径，多个文件以空格分隔（60秒内）: ")
+		fmt.Scanln(&userInput)
+		done <- true
+	}()
+	var err error
+	select {
+	case <-done:
+		fmt.Println("选择的文件是:", userInput)
+	case <-time.After(60 * time.Second):
+		os.Stdin.Close()
+		err = errors.New("超时，未输入任何内容")
+	}
+	files := strings.Split(userInput, ";")
+	for i := range files {
+		if !fileExists(files[i]) {
+			err = errors.New("文件不存在 " + files[i])
+		}
+	}
+	return files, err
 }
 
 func (f *Frontend) OpenDirectoryDialog(dialogOptions frontend.OpenDialogOptions) (string, error) {
